@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <bean id="helloWorldImplFirst" class="com.lgq.aop.impl.HelloWorldFirstImpl"/>
+    <bean id="helloWorldImplSecond" class="com.lgq.aop.impl.HelloWorldSecondImpl"/>
+
+    <bean id="timeHandle" class="com.lgq.aop.base.TimeHandle"/>
+    <bean id="logHandle" class="com.lgq.aop.base.LogHandle"/>
+    <bean id="throwHandle" class="com.lgq.aop.base.ThrowHandle"/>
+
+    <!--前后增强-->
+    <aop:config>
+        <!--order越小距离方法越远-->
+        <aop:aspect id="time" ref="timeHandle" order="1">
+            <aop:pointcut id="addAllMethod" expression="execution(* com.lgq.aop.impl.*.*(..))"/>
+            <aop:before method="printStartTime" pointcut-ref="addAllMethod"/>
+            <aop:after method="printEntTime" pointcut-ref="addAllMethod"/>
+        </aop:aspect>
+    </aop:config>
+
+    <!--环绕增强-->
+    <aop:config>
+        <!--order越大距离方法越近-->
+        <aop:aspect id="log" ref="logHandle" order="2">
+            <aop:pointcut id="addLog" expression="execution(* com.lgq.aop.impl.*.*(..))"/>
+            <aop:around method="printLog" pointcut-ref="addLog"/>
+<!--            <aop:after-throwing method="afterThrow" throwing="ex" pointcut-ref="addLog"/>-->
+        </aop:aspect>
+    </aop:config>
+
+    <!--环绕增强-->
+    <aop:config>
+        <!--order越大距离方法越近-->
+        <aop:aspect id="throwLog" ref="throwHandle" order="3">
+            <aop:pointcut id="throwLog" expression="execution(* com.lgq.aop.impl.*.*(..))"/>
+            <aop:after-throwing method="afterThrowing" throwing="ex" pointcut-ref="throwLog"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
