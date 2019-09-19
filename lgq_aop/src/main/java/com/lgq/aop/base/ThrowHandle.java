@@ -38,10 +38,4 @@ public class ThrowHandle implements ThrowsAdvice {
 
     }
 
-//        public void afterThrowing(JoinPoint joinPoint, Exception ex){
-//        String strLog = "doAfterThrowing Begining method: " + joinPoint.getTarget().getClass().getName()
-//                + "." + joinPoint.getSignature().getName();
-//        logger.error("异常抛出exception " + strLog, ex);
-////       logger.error(Level.ERROR, "异常抛出exception", e);
-//    }
 }
